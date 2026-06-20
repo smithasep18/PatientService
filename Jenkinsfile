@@ -6,7 +6,7 @@ pipeline {
   }
 
   parameters {
-    string(name: 'REPO_URL', defaultValue: 'https://github.com/smithasep18/AppointmentService.git', description: 'Git repository URL to clone')
+    string(name: 'REPO_URL', defaultValue: 'https://github.com/smithasep18/PatientService.git', description: 'Git repository URL to clone')
     string(name: 'BRANCH', defaultValue: 'main', description: 'Branch name to clone')
     string(name: 'DOCKER_REGISTRY', defaultValue: 'smitha18/patientservice', description: 'Docker Hub repository name (e.g. smitha18/patientservice)')
     string(name: 'IMAGE_TAG', defaultValue: "${env.BUILD_NUMBER}", description: 'Docker image tag')
@@ -63,9 +63,9 @@ pipeline {
           withCredentials([usernamePassword(credentialsId: params.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
             sh '''
               echo "$DOCKER_PASS" | docker login --username "$DOCKER_USER" --password-stdin
-              docker push ${imageName}
-              docker logout
             '''
+            sh "docker push ${imageName}"
+            sh 'docker logout'
           }
         }
       }
